@@ -1,12 +1,14 @@
 ## This version of the script exists on the grid- should be used for that envionment. 
 
 rm(list=ls())
+args <- commandArgs(trailingOnly = TRUE)
 setwd("/local/projects-t2/HRBV/SRL")
-sample_names<-read.table("SRL_manifest.sub.txt",header=F,sep="\t")
+sample_names_fn<-args[1]#"SRL_manifest.sub.txt"
+sample_names<-read.table(sample_names_fn,header=F,sep="\t")
 sample_names<-sort(sample_names$V1)
 #save(sample_names,file="SRL_sample_names.R")
 #load("SRL_sample_names.R")
-mismatch<-0
+mismatch<-args[2]#0
 
 alignments<-c("tRNA","hum5SrDNA","HumRibosomal","Gvag","hg19")
 mapping_stats<-data.frame(matrix(0,nrow=length(sample_names),ncol=length(alignments)*2))
