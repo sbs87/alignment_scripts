@@ -2,11 +2,11 @@
 
 rm(list=ls())
 args <- commandArgs(trailingOnly = TRUE)
-sample_names_fn<-args[1]#i.e., "SRL_manifest.txt"
-mismatch<-args[2]
+sample_names_fn<-args[1]#i.e., "SRL_sample_manifest.txt"
+mismatch<-args[2]# 1
 number_mirna_threshold<-args[3] ## i.e, 25 counts
-subset_feature<-args[4]
-root_dir<-args[5]
+subset_feature<-args[4] ##"MIR"
+root_dir<-args[5] ## "/Users/stsmith/tmp/"
 setwd(root_dir)
 
 trimming_stats_fn<-paste0(root_dir,"SRL_trimmomatic.stats")
@@ -77,9 +77,9 @@ detach(mapping_stats)
 # rarefaction_max<-apply(rarefaction,1,max)
 # rarefaction_min<-apply(rarefaction,1,min)
 # rarefaction_metrics<-data.frame(coverage=coverage,mean=rarefaction_mean,stdev=rarefaction_stdev,max=rarefaction_max,min=rarefaction_min)
-#rarefaction$coverage<-coverage
+# rarefaction_tmp$coverage<-coverage
 # }
-write.table(rarefaction,file=paste0(root_dir,"/stats/SRL_rarefaction_counts.gt",number_mirna_threshold,"_global_and_",subset_feature,"_n",mismatch,".txt"),sep="\t",row.names=T,col.names=NA,quote=F)
+write.table(rarefaction,file=paste0(root_dir,"/SRL_rarefaction_global_and_",subset_feature,"_TEST_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
 
-write.table(mapping_stats,file=paste0(root_dir,"/stats/SRL_mapping_statistics_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
-write.table(counts_table,file=paste0(root_dir,"/stats/SRL_counts_table_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
+write.table(mapping_stats,file=paste0(root_dir,"/SRL_mapping_statistics_TEST_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
+write.table(counts_table,file=paste0(root_dir,"/SRL_counts_table_TEST_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
