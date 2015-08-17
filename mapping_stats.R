@@ -11,29 +11,45 @@ sample_names<-sort(sample_names$V1)
 #save(sample_names,file="SRL_sample_names.R")
 #load("SRL_sample_names.R")
 mismatch<-args[2]#0
-
+subset_feature<-args[4]
 alignments<-c("tRNA","hum5SrDNA","HumRibosomal","Gvag","hg19")
 mapping_stats<-data.frame(matrix(0,nrow=length(sample_names),ncol=length(alignments)*2))
 row.names(mapping_stats)<-sample_names
 names(mapping_stats)<-paste(rep(alignments,each=2),rep(c("mapped","unmapped"),times=length(alignments)),sep=".")
 
+featureDetection_coverage<-function(relCoverage,sampleCount){
+  sum(relCoverage*sampleCount>number_mirna_threshold)
+}
 
-#universal_set<-read.table("universal_set.txt",header=F,sep="\t")
-#names(universal_set)<-"Feature"
+coverage<-seq(from = 1,to=0,by = -0.05)
+rarefaction<-data.frame(matrix(0,nrow=length(coverage),ncol = 2*length(sample_names)))
+row.names(rarefaction)<-coverage
+names(rarefaction)<-paste(rep(c("global","subset"),times=length(sample_names)),rep(sample_names,each=2),sep=".")
+rarefaction_miRNA<-rarefaction
 
 #mir_set<-universal_set[grepl("MIR",universal_set$Feature),]
 
 counts_table<-data.frame(Feature="")
-number_mirna_threshold<-25
+number_mirna_threshold<-args[3]#25
 
 for(i in 1:length(sample_names)){
-  #i<-2 
+  #i<-2
+	
   sample_name<-as.character(sample_names[i])
-  
+ 
+    counts_path<-paste0(root_dir,"/annotation/SRL_",sample_name,"_R1_trimmed_gt16.hg19_n",mismatch,".hg19_annotation_miRNA_counts.txt")
+    counts_table_sample<-read.table(counts_path,header=F,sep="\t")
+    names(counts_table_sample)<-c(sample_name,"Feature")
+    
+    counts_table<-merge(counts_table,counts_table_sample,by.x = "Feature",by.y="Feature",all=T)
+	counts_table_sample_subset<-counts_table_sample[grepl(subset_feature,counts_table_sample$Feature),]
+rarefaction[,paste0("global.",sample_name)]<-sapply(coverage,featureDetection_coverage,sampleCount=counts_table_sample[1])    
+rarefaction[,paste0("subset.",sample_name)]<-sapply(coverage,featureDetection_coverage,sampleCount=counts_table_sample_subset[1])
+ 
   for(j in 1:length(alignments)){
     #j<-3
     alignment<-alignments[j]
-    sample_path<-paste0("alignment/",alignment,"_n",mismatch,"/SRL_",sample_name,"_R1_trimmed_gt16.aln_",alignment,"_n",mismatch,".stats.txt")
+    sample_path<-paste0(root_dir,"/alignment/",alignment,"_n",mismatch,"/SRL_",sample_name,"_R1_trimmed_gt16.aln_",alignment,"_n",mismatch,".stats.txt")
     sample_stats<-read.table(sample_path,header=F,sep="\t")
     aligned<-sum(sample_stats[!sample_stats$V1=="*","V3"])
     unaligned<-sample_stats[sample_stats$V1=="*","V4"]
@@ -41,21 +57,10 @@ for(i in 1:length(sample_names)){
     mapping_stats[row.names(mapping_stats)==sample_name,slot]<-c(aligned,unaligned)
     
     
-    counts_path<-paste0("SRL_",sample_name,"_R1_trimmed_gt16.hg19_n",mismatch,".",alignment,"hg19_annotation_miRNA_counts.txt")
-    counts_table_sample<-read.table(counts_path,header=F,sep="\t")
-    names(counts_table_sample)<-c(sample_name,"Feature")
-    
-    counts_table<-merge(counts_table,new_table,by.x = "Feature",by.y="Feature")
-    
-    #unique_mirna_annotation_path<-paste0("~/Dropbox (IGS)/Working/smallRNA/Analysis/SRL_",sample_name,"_R1_trimmed_gt16.fastq.hg19.annotation.txt.uniqueMIRNAS.txt")
-    #sample_rarefaction<-read.table(unique_mirna_annotation_path,header=F,sep="\t")
-    ##rarefaction[,c(sample_name)]<-sapply(coverage,featureDetection_coverage,sampleCount=new_table[1])
-    #rarefaction_miRNA[,c(sample_name)]<-sapply(coverage,featureDetection_coverage,sampleCount=new_table_mirna[1])
-    
   }
 }
 mapping_stats$sample<-row.names(mapping_stats)
-
+rarefaction
 
 trimming_stats<-read.table("SRL_trimmomatic.stats",header=F,sep="\t")
 names(trimming_stats)<-c("sample", "reads_in","reads_surviving","IGNORE_DROPPED","IRGNORE_DROPPED_PERCENT")
