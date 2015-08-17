@@ -12,9 +12,6 @@ sample_names<-sort(sample_names$V1)
 #load("SRL_sample_names.R")
 mismatch<-args[2]#0
 
-print(mismatch)
-print(sample_names)
-
 alignments<-c("tRNA","hum5SrDNA","HumRibosomal","Gvag","hg19")
 mapping_stats<-data.frame(matrix(0,nrow=length(sample_names),ncol=length(alignments)*2))
 row.names(mapping_stats)<-sample_names
