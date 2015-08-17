@@ -2,7 +2,8 @@
 
 rm(list=ls())
 args <- commandArgs(trailingOnly = TRUE)
-setwd("/local/projects-t2/HRBV/SRL")
+#setwd("/local/projects-t2/HRBV/SRL")
+setwd("/local/scratch2/steve/SRL")
 sample_names_fn<-args[1]#"SRL_manifest.sub.txt"
 sample_names<-read.table(sample_names_fn,header=F,sep="\t")
 sample_names<-sort(sample_names$V1)
