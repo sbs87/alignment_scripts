@@ -1,10 +1,12 @@
+## This version of the script exists on the grid- should be used for that envionment. 
+
 rm(list=ls())
-setwd("/local/scratch2/steve/SRL")
-sample_names<-read.table("SRL_manifest.sub.txt",header=F,sep="\t")#c("UAB002_W3D7","UAB003_W6D4")
+setwd("/local/projects-t2/HRBV/SRL")
+sample_names<-read.table("SRL_manifest.sub.txt",header=F,sep="\t")
 sample_names<-sort(sample_names$V1)
 #save(sample_names,file="SRL_sample_names.R")
 #load("SRL_sample_names.R")
-mismatch<-2
+mismatch<-0
 
 alignments<-c("tRNA","hum5SrDNA","HumRibosomal","Gvag","hg19")
 mapping_stats<-data.frame(matrix(0,nrow=length(sample_names),ncol=length(alignments)*2))
@@ -44,4 +46,4 @@ mapping_stats$input_difference<-total_input_trimming-total_input_tRNA
 mapping_stats$mapped_total<-tRNA.mapped+hum5SrDNA.mapped+HumRibosomal.mapped+Gvag.mapped+hg19.mapped
 detach(mapping_stats)
 
-write.table(mapping_stats,file=paste0("SRL_mapping_statistics_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
+write.table(mapping_stats,file=paste0("SRL_mapping_statistics_TEST_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
