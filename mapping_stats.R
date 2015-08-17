@@ -84,5 +84,5 @@ rarefaction[is.na(rarefaction)]<-0
 write.table(rarefaction,file=paste0(root_dir,"/stats/SRL_rarefaction_counts.gt",number_mirna_threshold,"_global_and_",subset_feature,"_n",mismatch,".txt"),sep="\t",row.names=T,col.names=NA,quote=F)
 
 
-write.table(mapping_stats,file=paste0(root_dir,"/SRL_mapping_statistics_TEST_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
-write.table(counts_table,file=paste0(root_dir,"/SRL_counts_table_TEST_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
+write.table(mapping_stats,file=paste0(root_dir,"/stats/SRL_mapping_statistics_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
+write.table(counts_table,file=paste0(root_dir,"/stats/SRL_counts_table_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
