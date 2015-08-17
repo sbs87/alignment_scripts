@@ -30,18 +30,6 @@ for(i in 1:length(sample_names)){
   #i<-2 
   sample_name<-as.character(sample_names[i])
   
-  counts_path<-paste0("SRL_",sample_name,"_R1_trimmed_gt16.hg19_n",mismatch,".",alignment,"hg19_annotation_miRNA_counts.txt")
-  counts_table_sample<-read.table(counts_path,header=F,sep="\t")
-  names(counts_table_sample)<-c(sample_name,"Feature")
-  
-  counts_table<-merge(counts_table,new_table,by.x = "Feature",by.y="Feature")
-  
-  #unique_mirna_annotation_path<-paste0("~/Dropbox (IGS)/Working/smallRNA/Analysis/SRL_",sample_name,"_R1_trimmed_gt16.fastq.hg19.annotation.txt.uniqueMIRNAS.txt")
-  #sample_rarefaction<-read.table(unique_mirna_annotation_path,header=F,sep="\t")
-  ##rarefaction[,c(sample_name)]<-sapply(coverage,featureDetection_coverage,sampleCount=new_table[1])
-  #rarefaction_miRNA[,c(sample_name)]<-sapply(coverage,featureDetection_coverage,sampleCount=new_table_mirna[1])
-  
-  
   for(j in 1:length(alignments)){
     #j<-3
     alignment<-alignments[j]
@@ -51,6 +39,19 @@ for(i in 1:length(sample_names)){
     unaligned<-sample_stats[sample_stats$V1=="*","V4"]
     slot<-c(paste(alignment,"mapped",sep="."),paste(alignment,"unmapped",sep="."))
     mapping_stats[row.names(mapping_stats)==sample_name,slot]<-c(aligned,unaligned)
+    
+    
+    counts_path<-paste0("SRL_",sample_name,"_R1_trimmed_gt16.hg19_n",mismatch,".",alignment,"hg19_annotation_miRNA_counts.txt")
+    counts_table_sample<-read.table(counts_path,header=F,sep="\t")
+    names(counts_table_sample)<-c(sample_name,"Feature")
+    
+    counts_table<-merge(counts_table,new_table,by.x = "Feature",by.y="Feature")
+    
+    #unique_mirna_annotation_path<-paste0("~/Dropbox (IGS)/Working/smallRNA/Analysis/SRL_",sample_name,"_R1_trimmed_gt16.fastq.hg19.annotation.txt.uniqueMIRNAS.txt")
+    #sample_rarefaction<-read.table(unique_mirna_annotation_path,header=F,sep="\t")
+    ##rarefaction[,c(sample_name)]<-sapply(coverage,featureDetection_coverage,sampleCount=new_table[1])
+    #rarefaction_miRNA[,c(sample_name)]<-sapply(coverage,featureDetection_coverage,sampleCount=new_table_mirna[1])
+    
   }
 }
 mapping_stats$sample<-row.names(mapping_stats)
