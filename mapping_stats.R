@@ -2,9 +2,10 @@
 
 rm(list=ls())
 args <- commandArgs(trailingOnly = TRUE)
+args <-c("SRL_manifest.txt",1,25,"MIR","/local/scratch2/steve/SRL/")
 sample_names_fn<-args[1]#i.e., "SRL_sample_manifest.txt"
 mismatch<-args[2]# 1
-number_mirna_threshold<-args[3] ## i.e, 25 counts
+number_mirna_threshold<-as.numeric(args[3]) ## i.e, 25 counts- MAKE SURE NUMERIC!
 subset_feature<-args[4] ##"MIR"
 root_dir<-args[5] ## "/Users/stsmith/tmp/"
 setwd(root_dir)
