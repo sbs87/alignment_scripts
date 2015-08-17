@@ -4,12 +4,16 @@ rm(list=ls())
 args <- commandArgs(trailingOnly = TRUE)
 #setwd("/local/projects-t2/HRBV/SRL")
 setwd("/local/scratch2/steve/SRL")
+root_dir<-getwd()
 sample_names_fn<-args[1]#"SRL_manifest.sub.txt"
 sample_names<-read.table(sample_names_fn,header=F,sep="\t")
 sample_names<-sort(sample_names$V1)
 #save(sample_names,file="SRL_sample_names.R")
 #load("SRL_sample_names.R")
 mismatch<-args[2]#0
+
+print(mismatch)
+print(sample_names)
 
 alignments<-c("tRNA","hum5SrDNA","HumRibosomal","Gvag","hg19")
 mapping_stats<-data.frame(matrix(0,nrow=length(sample_names),ncol=length(alignments)*2))
@@ -49,4 +53,4 @@ mapping_stats$input_difference<-total_input_trimming-total_input_tRNA
 mapping_stats$mapped_total<-tRNA.mapped+hum5SrDNA.mapped+HumRibosomal.mapped+Gvag.mapped+hg19.mapped
 detach(mapping_stats)
 
-write.table(mapping_stats,file=paste0("SRL_mapping_statistics_TEST_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
+write.table(mapping_stats,file=paste0(root_dir,"/SRL_mapping_statistics_TEST_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
