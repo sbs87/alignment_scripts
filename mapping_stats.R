@@ -79,6 +79,7 @@ detach(mapping_stats)
 # rarefaction_metrics<-data.frame(coverage=coverage,mean=rarefaction_mean,stdev=rarefaction_stdev,max=rarefaction_max,min=rarefaction_min)
 #rarefaction$coverage<-coverage
 # }
+rarefaction[is.na(rarefaction)]<-0
 write.table(rarefaction,file=paste0(root_dir,"/stats/SRL_rarefaction_counts.gt",number_mirna_threshold,"_global_and_",subset_feature,"_n",mismatch,".txt"),sep="\t",row.names=T,col.names=NA,quote=F)
 
 write.table(mapping_stats,file=paste0(root_dir,"/stats/SRL_mapping_statistics_n",mismatch,".txt"),sep="\t",row.names=F,quote=F)
